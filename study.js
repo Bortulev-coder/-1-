@@ -66,6 +66,7 @@ const select=byId("pages");
 titles.forEach((t,i)=>select.add(new Option((i+1)+". "+t,i+1)));
 function showPage(n){
   if(n<1||n>titles.length)return;
+  byId("reader-model").hidden = n !== 11;
   select.value=n;byId("pdfpage").src="assets/pages/"+n+".webp";
   byId("pdfpage").alt="Страница "+n+". "+titles[n-1];
   byId("accessible-page").textContent=pageText[n-1];
