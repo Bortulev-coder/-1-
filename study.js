@@ -27,10 +27,10 @@ for(const [name,meaning,mapping,cycles] of operations){
   row.insertCell().textContent = cycles;
 }
 const cues=[
- [0,"Команда и цель","Титульный лист и имена всех троих."],
- [20,"Геометрия и нумерация","Рисунок 1, стр. 4. Покажи ось z и номера 1–4."],
- [50,"Симметрии и циклы","Собственный рукописный лист. Покажи два поворота и три отражения."],
- [100,"Свойства молекулы","Стр. 12–13. Покажи μ вдоль z, зеркальную плоскость и 2A₁ + 2E."]
+ [0,"Команда и цель","Наш титульный лист с именами участников."],
+ [20,"Геометрия и нумерация","На рисунке 1 (стр. 4) я показываю ось z и атомы 1–4."],
+ [50,"Симметрии и циклы","На своём рукописном листе я показываю два поворота и три отражения."],
+ [100,"Свойства молекулы","На стр. 12–13 я показываю направление диполя, зеркальную плоскость и разложение 2A₁ + 2E."]
 ];
 const formatTime=s=>String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
 let elapsed=0, origin=0, ticking=null;
@@ -42,7 +42,7 @@ function renderCue(){
   if(buttons[i].getAttribute("aria-pressed")!=="true"){
     buttons.forEach((b,j)=>b.setAttribute("aria-pressed",String(j===i)));
     byId("cue-title").textContent=cues[i][1];
-    byId("cue-screen").textContent="На экране — "+cues[i][2];
+    byId("cue-screen").textContent=cues[i][2];
     byId("cue-text").textContent=speech[i];
   }
   byId("play").textContent=ticking!==null?"Пауза":s>=130?"Повторить":elapsed>0?"Продолжить":"Начать репетицию";
