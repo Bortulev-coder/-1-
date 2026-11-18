@@ -26,14 +26,6 @@ for(const [name,meaning,mapping,cycles] of operations){
   row.insertCell().innerHTML = '<span class="matrix">1 2 3 4\n'+mapping+'</span>';
   row.insertCell().textContent = cycles;
 }
-const gallery=byId("gallery");
-const copy=document.querySelector(".sheet .tablewrap").cloneNode(true);
-copy.querySelector("tbody").removeAttribute("id");
-byId("dialog-sheet").append(copy);
-byId("show-manuscript").onclick=()=>gallery.showModal();
-byId("close-dialog").onclick=()=>gallery.close();
-const galleryLink=document.querySelector('#visuals a[href="#manuscript"]');
-galleryLink.onclick=event=>{event.preventDefault();gallery.showModal();};
 const cues=[
  [0,"Команда и цель","Титульный лист и имена всех троих."],
  [20,"Геометрия и нумерация","Рисунок 1, стр. 4. Покажи ось z и номера 1–4."],
