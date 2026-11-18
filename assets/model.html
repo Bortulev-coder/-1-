@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NF₃ — группа симметрии C₃ᵥ</title>
+<style>
+:root{color-scheme:light;--ink:#162338;--muted:#536174;--line:#d8e1e9;--blue:#2563a8;--green:#16855b;--paper:#fff;--bg:#f3f6f9}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,sans-serif}main{max-width:1160px;margin:auto;padding:28px}header{margin-bottom:22px}h1{font-size:32px;margin:0 0 5px;font-weight:650}h2{font-size:19px;margin:0 0 12px}p{margin:6px 0 12px}.meta{font-size:14px;color:var(--muted)}.layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px}.model,.controls{background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden}.model{padding:12px}.controls{padding:20px}canvas{display:block;width:100%;height:510px;touch-action:none;cursor:grab}canvas:active{cursor:grabbing}.row{display:flex;align-items:center;flex-wrap:wrap;gap:8px}.row+.row{margin-top:10px}button{font:inherit;border:1px solid #bccbd8;border-radius:8px;padding:8px 12px;background:white;color:var(--ink);cursor:pointer;min-height:42px}button:hover{background:#eef4fa}button:focus-visible,input:focus-visible{outline:3px solid #90b9e1;outline-offset:3px}button[aria-pressed=true],button.primary{color:white;background:var(--blue);border-color:var(--blue)}.operations{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}.label{font-size:14px;color:var(--muted)}.legend{display:flex;gap:16px;flex-wrap:wrap;padding:0 10px 10px;font-size:14px}.dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px}.nitrogen{background:var(--blue)}.fluorine{background:var(--green)}.note{font-size:14px;color:var(--muted);margin-top:14px}#opname{font-size:19px;font-weight:600}#warning{font-size:14px;color:#764f13;min-height:65px}#mapping{width:100%;border-collapse:collapse;font-size:15px;margin:12px 0 18px}#mapping th,#mapping td{text-align:left;padding:7px;border-bottom:1px solid var(--line)}#mapping th{font-weight:500;color:var(--muted)}label{display:block;margin:9px 0}input[type=checkbox]{width:17px;height:17px;vertical-align:middle;margin-right:7px}input[type=range]{width:100%;accent-color:var(--blue)}hr{border:0;border-top:1px solid var(--line);margin:18px 0}footer{margin-top:20px;font-size:14px;color:var(--muted)}a{color:#165b99;overflow-wrap:anywhere}.hint{font-size:13px;color:var(--muted);margin:6px 10px}.time{font-variant-numeric:tabular-nums}.classes{line-height:1.8}#stage{font-weight:500}.full{width:100%}
+@media(max-width:800px){main{padding:16px}.layout{grid-template-columns:1fr}canvas{height:400px}.controls{padding:18px}h1{font-size:27px}.operations{grid-template-columns:repeat(6,1fr)}button{padding:8px}}
+@media(max-width:430px){canvas{height:335px}.operations{grid-template-columns:repeat(3,1fr)}main{padding:10px}h1{font-size:24px}.legend{gap:10px}.row button{font-size:14px}}
+</style>
+</head>
+<body><main>
+<header><p class="meta">Высшая алгебра · группа 7</p><h1>Трифторид азота NF₃</h1><p>Интерактивная модель группы C₃ᵥ ≅ S₃</p></header>
+<div class="layout">
+<section class="model" aria-label="Модель молекулы">
+<canvas id="molecule" role="img" aria-label="Молекула NF3 с нумерацией атомов, осью C3 и тремя зеркальными плоскостями">Азот N1 находится над плоскостью трех атомов фтора F2, F3, F4.</canvas>
+<div class="legend"><span><i class="dot nitrogen"></i>Азот N₁</span><span><i class="dot fluorine"></i>Фтор F₂, F₃, F₄</span><span>Ось C₃ — золотая</span></div>
+<p class="hint">Перетаскивание — поворот камеры. Колесо мыши — масштаб. Метки перемещаются вместе с атомами.</p>
+<div class="row"><button id="oblique">Объёмный вид</button><button id="top">Вид с +z</button><button id="zoomIn" aria-label="Приблизить">+</button><button id="zoomOut" aria-label="Отдалить">−</button></div>
+<p class="hint">Серые контуры обозначают исходные положения. Все операции начинаются с одной исходной конфигурации.</p>
+</section>
+<aside class="controls">
+<h2>Операции симметрии</h2>
+<div class="operations" role="group" aria-label="Выбрать операцию">
+<button data-op="E" aria-pressed="true">E</button><button data-op="r" aria-pressed="false">C₃</button><button data-op="r2" aria-pressed="false">C₃²</button><button data-op="s1" aria-pressed="false">σ₁</button><button data-op="s2" aria-pressed="false">σ₂</button><button data-op="s3" aria-pressed="false">σ₃</button>
+</div>
+<div aria-live="polite"><div id="opname">E — тождество</div><p id="cycle">(1)(2)(3)(4)</p><p class="label" id="classLabel">Класс {E}</p></div>
+<div class="row"><button id="play" class="primary">Воспроизвести</button><button id="start">К началу</button></div>
+<label for="progress" class="label">Ход операции <span id="percent" class="time">0%</span></label><input id="progress" type="range" min="0" max="1000" value="0" aria-label="Ход операции">
+<p id="stage" class="label">Исходное положение</p><p id="warning">E оставляет все атомы неподвижными.</p>
+<table id="mapping"><thead><tr><th>Атом</th><th>Итоговая позиция</th></tr></thead><tbody></tbody></table>
+<label><input type="checkbox" id="axis" checked>Ось C₃</label>
+<label><input type="checkbox" id="planes" checked>Три плоскости σᵥ</label>
+<label><input type="checkbox" id="ghost" checked>Исходные положения</label>
+<label><input type="checkbox" id="labels" checked>Номера атомов</label>
+<hr><div class="label">Классы сопряжённости</div><div class="classes">{E}<br>{C₃, C₃²}<br>{σ₁, σ₂, σ₃}</div>
+</aside></div>
+<footer><p>σ₁ содержит N₁F₂, σ₂ — N₁F₃, σ₃ — N₁F₄. Положительный поворот идёт против часовой стрелки при наблюдении с +z. Нумерация совпадает с отчётом. Центра инверсии, горизонтальной плоскости и дополнительных зеркально-поворотных осей нет.</p>
+<p>Геометрия: r(N–F) = 1,365 Å, ∠F–N–F = 102,37°. Координаты построены из этих параметров с точной симметрией C₃ᵥ. <a href="https://cccbdb.nist.gov/expgeom2x.asp?casno=7783542&amp;charge=0" target="_blank" rel="noreferrer">Источник — NIST CCCBDB</a>. Модель работает без подключения к интернету.</p>
+</footer></main>
+<script>
+'use strict';
+const q=id=>document.getElementById(id),canvas=q('molecule'),ctx=canvas.getContext('2d');
+const R=1.2281075824057857,h=.5957992665633418;
+const atoms=[[0,0,h],[R,0,0],[-R/2,Math.sqrt(3)*R/2,0],[-R/2,-Math.sqrt(3)*R/2,0]];
+const names=['N₁','F₂','F₃','F₄'],atomColors=['#2563a8','#16855b','#16855b','#16855b'];
+const ops={E:{title:'E — тождество',cycle:'(1)(2)(3)(4)',p:[1,2,3,4]},r:{title:'C₃ — поворот на 120°',cycle:'(1)(2 3 4)',angle:2*Math.PI/3,p:[1,3,4,2]},r2:{title:'C₃² — поворот на 240°',cycle:'(1)(2 4 3)',angle:4*Math.PI/3,p:[1,4,2,3]},s1:{title:'σ₁ — плоскость N₁F₂',cycle:'(1)(2)(3 4)',theta:0,p:[1,2,4,3]},s2:{title:'σ₂ — плоскость N₁F₃',cycle:'(1)(3)(2 4)',theta:2*Math.PI/3,p:[1,4,3,2]},s3:{title:'σ₃ — плоскость N₁F₄',cycle:'(1)(4)(2 3)',theta:4*Math.PI/3,p:[1,3,2,4]}};
+let op='E',t=0,yaw=.25,elevation=.45,zoom=1,playing=false,runId=0,width=0,height=0;
+function transformed(key,progress){const o=ops[key];return atoms.map(([x,y,z])=>{if(o.angle!==undefined){const a=o.angle*progress;return [x*Math.cos(a)-y*Math.sin(a),x*Math.sin(a)+y*Math.cos(a),z];}if(o.theta!==undefined){const nx=-Math.sin(o.theta),ny=Math.cos(o.theta),distance=nx*x+ny*y;return [x-2*progress*distance*nx,y-2*progress*distance*ny,z];}return [x,y,z];});}
+function project([x,y,z]){const xx=Math.cos(yaw)*x+Math.sin(yaw)*y,yy=-Math.sin(yaw)*x+Math.cos(yaw)*y,zz=z-.2;const scale=Math.min(width/4.9,height/3.8)*zoom;return [width/2+xx*scale,height/2-(Math.cos(elevation)*zz-Math.sin(elevation)*yy)*scale,Math.cos(elevation)*yy+Math.sin(elevation)*zz,scale];}
+function line(points,color,lw=1,dash=[]){ctx.beginPath();points.forEach((p,i)=>{const a=project(p);i?ctx.lineTo(a[0],a[1]):ctx.moveTo(a[0],a[1]);});ctx.strokeStyle=color;ctx.lineWidth=lw;ctx.setLineDash(dash);ctx.stroke();ctx.setLineDash([]);}
+function textAt(label,p,color,dx=0,dy=0){const v=project(p);ctx.fillStyle=color;ctx.font='16px system-ui';ctx.textAlign='center';ctx.fillText(label,v[0]+dx,v[1]+dy);}
+function draw(){ctx.clearRect(0,0,width,height);const coords=transformed(op,t);
+ if(q('planes').checked){[0,2*Math.PI/3,4*Math.PI/3].forEach((angle,i)=>{const c=Math.cos(angle),s=Math.sin(angle),col=['167,70,166','192,117,18','21,121,155'][i];const ps=[[-1.5*c,-1.5*s,-.33],[1.5*c,1.5*s,-.33],[1.5*c,1.5*s,1.20],[-1.5*c,-1.5*s,1.20]];ctx.beginPath();ps.forEach((p,j)=>{const v=project(p);j?ctx.lineTo(v[0],v[1]):ctx.moveTo(v[0],v[1]);});ctx.closePath();ctx.fillStyle=`rgba(${col},${op==='s'+(i+1)?'.18':'.07'})`;ctx.fill();ctx.strokeStyle=`rgba(${col},.5)`;ctx.lineWidth=1;ctx.stroke();textAt(['σ₁','σ₂','σ₃'][i],[1.60*c,1.60*s,.87],`rgb(${col})`);});}
+ if(q('axis').checked){line([[0,0,-.6],[0,0,1.55]],'#b47b18',2,[6,5]);textAt('C₃',[0,0,1.58],'#946014',18,-3);}
+ if(q('ghost').checked){atoms.forEach((p,i)=>{const v=project(p),r=22;ctx.beginPath();ctx.arc(v[0],v[1],r,0,Math.PI*2);ctx.strokeStyle='#bfc9d4';ctx.lineWidth=1.5;ctx.setLineDash([3,4]);ctx.stroke();ctx.setLineDash([]);if(q('labels').checked){ctx.fillStyle='#65758a';ctx.font='12px system-ui';ctx.fillText('поз. '+(i+1),v[0],v[1]+38);}});}
+ for(let i=1;i<4;i++)line([coords[0],coords[i]],'#8b97a6',8);
+ coords.map((p,i)=>({p,i,v:project(p)})).sort((a,b)=>a.v[2]-b.v[2]).forEach(({i,v})=>{const radius=Math.max(15,Math.min(25,v[3]*.19));const grad=ctx.createRadialGradient(v[0]-radius*.32,v[1]-radius*.38,radius*.1,v[0],v[1],radius);grad.addColorStop(0,i===0?'#70ace1':'#73cfaa');grad.addColorStop(1,atomColors[i]);ctx.beginPath();ctx.arc(v[0],v[1],radius,0,2*Math.PI);ctx.fillStyle=grad;ctx.fill();ctx.strokeStyle='white';ctx.lineWidth=2;ctx.stroke();if(q('labels').checked){ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='600 17px system-ui';ctx.fillStyle='white';ctx.fillText(String(i+1),v[0],v[1]);ctx.font='14px system-ui';ctx.fillStyle=atomColors[i];ctx.fillText(names[i],v[0]+radius+14,v[1]-radius-6);ctx.textBaseline='alphabetic';}});
+}
+function resize(){const box=canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);width=box.width;height=box.height;canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);draw();}
+function sync(){q('progress').value=Math.round(t*1000);q('percent').textContent=Math.round(t*100)+'%';q('stage').textContent=t===0?'Исходное положение':t===1?'Итоговая конфигурация':'Промежуточный кадр';draw();}
+function stop(){runId++;playing=false;q('play').textContent='Воспроизвести';}
+function animate(){stop();playing=true;q('play').textContent='Пауза';const id=runId,start=performance.now(),initial=t>=1?0:t;t=initial;const duration=2500;if(matchMedia('(prefers-reduced-motion: reduce)').matches){t=1;stop();sync();return;}function step(now){if(id!==runId)return;t=Math.min(1,initial+(now-start)/duration);sync();if(t<1)requestAnimationFrame(step);else stop();}requestAnimationFrame(step);}
+function choose(key,play=true){stop();op=key;t=0;const o=ops[op];q('opname').textContent=o.title;q('cycle').textContent=o.cycle;q('classLabel').textContent='Класс '+(op==='E'?'{E}':op.startsWith('s')?'{σ₁, σ₂, σ₃}':'{C₃, C₃²}');q('warning').textContent=op.startsWith('s')?'Промежуточные кадры отражения — условная интерполяция, а не физическое движение молекулы.':op==='E'?'E оставляет все атомы неподвижными.':'Поворот сохраняет все длины связей и углы.';q('mapping').querySelector('tbody').innerHTML=o.p.map((j,i)=>`<tr><td>${names[i]}</td><td>${j}</td></tr>`).join('');document.querySelectorAll('[data-op]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.op===op)));sync();if(play)animate();}
+document.querySelectorAll('[data-op]').forEach(b=>b.addEventListener('click',()=>choose(b.dataset.op)));
+q('play').addEventListener('click',()=>playing?stop():animate());q('start').addEventListener('click',()=>{stop();t=0;sync();});q('progress').addEventListener('input',e=>{stop();t=Number(e.target.value)/1000;sync();});
+['axis','planes','ghost','labels'].forEach(id=>q(id).addEventListener('change',draw));
+q('top').addEventListener('click',()=>{yaw=0;elevation=Math.PI/2;zoom=1;draw();});q('oblique').addEventListener('click',()=>{yaw=.25;elevation=.45;zoom=1;draw();});q('zoomIn').addEventListener('click',()=>{zoom=Math.min(1.65,zoom*1.15);draw();});q('zoomOut').addEventListener('click',()=>{zoom=Math.max(.6,zoom/1.15);draw();});
+let pointer=null;canvas.addEventListener('pointerdown',e=>{pointer=[e.clientX,e.clientY];canvas.setPointerCapture(e.pointerId);});canvas.addEventListener('pointermove',e=>{if(!pointer)return;yaw+=(e.clientX-pointer[0])*.008;elevation=Math.max(-1.5,Math.min(Math.PI/2,elevation+(e.clientY-pointer[1])*.008));pointer=[e.clientX,e.clientY];draw();});canvas.addEventListener('pointerup',()=>pointer=null);canvas.addEventListener('pointercancel',()=>pointer=null);canvas.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.max(.6,Math.min(1.65,zoom*Math.exp(-e.deltaY*.001)));draw();},{passive:false});
+new ResizeObserver(resize).observe(canvas);choose('E',false);resize();
+window.nf3Test={atoms,ops,transformed,choose,get state(){return {op,t,yaw,elevation,zoom}}};
+</script></body></html>
